@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Sub1GitHubUser" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/GHgrey</item>
+        <item name="colorPrimaryVariant">@color/GHred</item>
+        <item name="colorOnPrimary">@color/GHwhite</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/GHgreen</item>
+        <item name="colorSecondaryVariant">@color/GHorange</item>
+        <item name="colorOnSecondary">@color/GHblack</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Github Color. -->
+    </style>
+</resources>
