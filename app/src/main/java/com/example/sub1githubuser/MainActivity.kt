@@ -1,24 +1,28 @@
 package com.example.sub1githubuser
 
+import android.app.SearchManager
 import android.content.ContentValues.TAG
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.view.Menu
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sub1githubuser.databinding.ActivityMainBinding
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
-import javax.security.auth.callback.Callback
 
 class MainActivity : AppCompatActivity() {
+
+
 
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var rcyUser: RecyclerView
-    private val list = ArrayList<GHuser>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,109 +30,86 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.hide()
+//        supportActionBar?.hide()
 
         rcyUser = findViewById(R.id.rcyUser)
         rcyUser.setHasFixedSize(true)
 
-
-        list.addAll(listUser)
-        showRecyclerList()
+        findUser("farel")
     }
 
-    private fun findUser() {
-//        showLoading(true)
-        val client = ApiConfig.getApiService().getUser("ChristanFarel")
+    private fun findUser(cariUser: String) {
+        showLoading(true)
+        val client = ApiConfig.getApiService().getUser(cariUser)
         client.enqueue(object : Callback<SearchResponse> {
             override fun onResponse(
                 call: Call<SearchResponse>,
                 response: Response<SearchResponse>
             ) {
-//                showLoading(false)
+                showLoading(false)
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
-//                        setRestaurantData(responseBody.restaurant)
-                        setReviewData(responseBody.restaurant.customerReviews)
+                        showRecyclerList(responseBody.items)
                     }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-//                showLoading(false)
+                showLoading(false)
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
     }
-//    private fun setRestaurantData(restaurant: User) {
-//        binding.tvTitle.text = restaurant.name
-//        binding.tvDescription.text = restaurant.description
-//        Glide.with(this@MainActivity)
-//            .load("https://restaurant-api.dicoding.dev/images/large/${restaurant.pictureId}")
-//            .into(binding.ivPicture)
-//    }
-    private fun setReviewData(allUser: List<ItemsItem>) {
-        val listUser = ArrayList<GHuser>()
-        for (user1 in allUser) {
-            val us = GHuser("coba", user1.login, user1.avatarUrl, user1.score.toString(), user1.score.toString(), )
-//            listUser.add("coba",user.login)
-//            listUser.add(
-//                """
-//                ${review.review}
-//                - ${review.name}
-//                """.trimIndent()
-//            )
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
         }
-        val adapter = ReviewAdapter(listReview)
-        binding.rvReview.adapter = adapter
-        binding.edReview.setText("")
     }
 
-    private val listUser: ArrayList<GHuser>
-        get() {
-            val dataNama = resources.getStringArray(R.array.data_nama)
-            val datausername = resources.getStringArray(R.array.data_username)
-            val dataFollower = resources.getStringArray(R.array.data_follower)
-            val dataFollowing = resources.getStringArray(R.array.data_following)
-            val dataFoto = resources.obtainTypedArray(R.array.data_foto)
-            val dataLoc = resources.getStringArray(R.array.data_location)
-            val dataRepo = resources.getStringArray(R.array.data_repo)
-            val dataCompany = resources.getStringArray(R.array.data_company)
 
-            val listUser = ArrayList<GHuser>()
-            for (i in dataNama.indices) {
-                val user = GHuser(dataNama[i],datausername[i],dataFoto.getResourceId(i,0),dataFollower[i],dataFollowing[i],dataCompany[i], dataLoc[i], dataRepo[i])
-                listUser.add(user)
-            }
-            return listUser
-        }
 
-    private  fun showRecyclerList(){
+    private  fun showRecyclerList(isi: ArrayList<ItemsItem>){
         rcyUser.layoutManager = LinearLayoutManager(this)
-        val listUserAdapter = ListGHuserAdapter(list)
+        val listUserAdapter = ListGHuserAdapter(isi)
         rcyUser.adapter  = listUserAdapter
+    }
 
-        listUserAdapter.setOnItemClickCallback(object : ListGHuserAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: GHuser) {
-                showSelectedUser(data)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.search_menu, menu)
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(R.id.search).actionView as androidx.appcompat.widget.SearchView
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView.queryHint = resources.getString(R.string.search_hint)
+        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            /*
+            Gunakan method ini ketika search selesai atau OK
+             */
+            override fun onQueryTextSubmit(query: String): Boolean {
+//                Toast.makeText(this@MainActivity, query, Toast.LENGTH_SHORT).show()
+                findUser(query)
+                searchView.clearFocus()
+                return true
+            }
+
+            /*
+            Gunakan method ini untuk merespon tiap perubahan huruf pada searchView
+             */
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
             }
         })
+        return true
     }
 
-    private fun showSelectedUser(user: GHuser) {
-        val semua = GHuser(user.nama,
-            user.username,
-            user.foto,
-            user.follower,
-            user.following,
-            user.company,
-            user.location,
-            user.repo
-            )
-        val Intent = Intent(this, DetailUser::class.java)
 
-        Intent.putExtra("All", semua)
-        startActivity(Intent)
-    }
+
+
 }

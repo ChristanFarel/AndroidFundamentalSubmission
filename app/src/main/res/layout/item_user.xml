@@ -33,21 +33,6 @@
             tools:src="@drawable/user10" />
 
         <TextView
-            android:id="@+id/itemNama"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="Christan Farel Pamungkas"
-            android:textColor="@color/GHwhite"
-            card_view:layout_constraintBottom_toTopOf="@+id/itemUsername"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintHorizontal_bias="0.497"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toBottomOf="@+id/itemGambar"
-            card_view:layout_constraintVertical_bias="0.266" />
-
-        <TextView
             android:id="@+id/itemUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

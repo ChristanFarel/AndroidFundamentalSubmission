@@ -1,47 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loadConstraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:orientation="vertical"
-    tools:context=".DetailUser">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="top">
-
-        <include
-            layout="@layout/loading_layout"
-            android:id="@+id/detailUserLayout"
-            />
-
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight=".3"
-        android:background="@color/GHgrey"
-        android:backgroundTintMode="add">
 
         <ImageView
-            android:id="@+id/detailGambar"
+            android:id="@+id/detailGambarLoad"
             android:layout_width="150dp"
             android:layout_height="150dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -53,26 +20,28 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/detailUsername"
+            android:id="@+id/detailUsernameLoad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/GHblack"
+            android:text="ChristanFarel"
+            android:background="#9D9D9D"
+            android:textColor="#9D9D9D"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailGambar"
+            app:layout_constraintTop_toBottomOf="@+id/detailGambarLoad"
             app:layout_constraintVertical_bias="0.0" />
 
 
         <TableLayout
-            android:id="@+id/tableLayout"
+            android:id="@+id/tableLayoutLoad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailUsername"
+            app:layout_constraintTop_toBottomOf="@+id/detailUsernameLoad"
             app:layout_constraintVertical_bias="0.0">
 
             <TableRow
@@ -82,7 +51,7 @@
                 >
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/imageView2Load"
                     android:layout_width="21dp"
                     android:layout_height="21dp"
                     android:layout_marginRight="10dp"
@@ -90,14 +59,16 @@
                     app:srcCompat="@drawable/ic_baseline_people_24" />
 
                 <TextView
-                    android:id="@+id/detailFollower"
+                    android:id="@+id/detailFollowerLoad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:textColor="@color/GHblack" />
+                    android:text="154607"
+                    android:background="#9D9D9D"
+                    android:textColor="#9D9D9D" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/textView5Load"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
@@ -105,14 +76,16 @@
                     android:textColor="@color/GHblack" />
 
                 <TextView
-                    android:id="@+id/detailFollowing"
+                    android:id="@+id/detailFollowingLoad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:textColor="@color/GHblack" />
+                    android:text="154607"
+                    android:background="#9D9D9D"
+                    android:textColor="#9D9D9D" />
 
                 <TextView
-                    android:id="@+id/fol"
+                    android:id="@+id/folLoad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Following"
@@ -125,25 +98,26 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tableLayout">
+            app:layout_constraintTop_toBottomOf="@+id/tableLayoutLoad">
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imageView5"
+                    android:id="@+id/imageView5Load"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     app:srcCompat="@drawable/ic_baseline_location_on_24" />
 
                 <TextView
-                    android:id="@+id/detailLocation"
+                    android:id="@+id/detailLocationLoad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                     />
+                    android:text="Chicago, Bulss"
+                    android:background="#9D9D9D"
+                    android:textColor="#9D9D9D" />
             </TableRow>
 
             <TableRow
@@ -153,17 +127,19 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/imageView4Load"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     app:srcCompat="@drawable/ic_baseline_insights_24" />
 
                 <TextView
-                    android:id="@+id/detailRepository"
+                    android:id="@+id/detailRepositoryLoad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                     />
+                    android:text="Chicago, Bulss"
+                    android:background="#9D9D9D"
+                    android:textColor="#9D9D9D" />
             </TableRow>
 
             <TableRow
@@ -172,40 +148,24 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/imageView3Load"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
                     app:srcCompat="@drawable/ic_baseline_location_city_24" />
 
                 <TextView
-                    android:id="@+id/detailCompany"
+                    android:id="@+id/detailCompanyLoad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                     />
+                    android:text="Chicago, Bulss"
+                    android:background="#9D9D9D"
+                    android:textColor="#9D9D9D"
+                    />
             </TableRow>
 
         </TableLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight=".3">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:tabTextColor="@android:color/white"/>
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

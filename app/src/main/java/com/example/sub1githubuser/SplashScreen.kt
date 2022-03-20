@@ -8,6 +8,10 @@ import java.util.*
 
 
 class SplashScreen : AppCompatActivity() {
+
+    companion object{
+        const val lamaDelay = 2500
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
@@ -17,6 +21,6 @@ class SplashScreen : AppCompatActivity() {
         Handler().postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
             finish()
-        },2500)
+        },lamaDelay.toLong())
     }
 }

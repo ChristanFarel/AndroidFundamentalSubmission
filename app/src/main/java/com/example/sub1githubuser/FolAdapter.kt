@@ -7,28 +7,26 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sub1githubuser.databinding.ItemUserBinding
 
-class ListGHuserAdapter(private val listUser: ArrayList<ItemsItem>) :  RecyclerView.Adapter<ListGHuserAdapter.ListViewHolder>(){
-
-    companion object{
-        const val USERNAME = "USERNAME"
-    }
-
-
-    private lateinit var onItemClickCallback: OnItemClickCallback
-
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
+class FolAdapter (private val listUser: ArrayList<FollowResponseItem>) : RecyclerView.Adapter<FolAdapter.ListViewHolder>(){
 
     class ListViewHolder(var binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ListViewHolder(binding)
+
+    private lateinit var onItemClickCallback: FolAdapter.OnItemClickCallback
+
+    fun setOnItemClickCallback(onItemClickCallback: FolAdapter.OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
     }
 
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val (username, foto,) = listUser[position]
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolAdapter.ListViewHolder {
+        val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return FolAdapter.ListViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: FolAdapter.ListViewHolder, position: Int) {
+        val semua = listUser[position]
+        val foto = semua.avatarUrl
+        val username = semua.login
 
         Glide.with(holder.itemView.context)
             .load(foto)
@@ -40,12 +38,11 @@ class ListGHuserAdapter(private val listUser: ArrayList<ItemsItem>) :  RecyclerV
         holder.itemView.setOnClickListener{
 
             val intent = Intent(holder.itemView.context ,DetailUser::class.java)
-            intent.putExtra(USERNAME, username)
+            intent.putExtra(ListGHuserAdapter.USERNAME, username)
             SectionsPagerAdapter.username = username
             holder.itemView.context.startActivity(intent)
 
         }
-
     }
 
     override fun getItemCount(): Int = listUser.size
@@ -53,5 +50,6 @@ class ListGHuserAdapter(private val listUser: ArrayList<ItemsItem>) :  RecyclerV
     interface OnItemClickCallback {
         fun onItemClicked(data: GHuser)
     }
+
 
 }
