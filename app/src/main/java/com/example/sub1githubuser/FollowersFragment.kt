@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,6 @@ class FollowersFragment : Fragment() {
 
         val username = arguments?.getString(SectionsPagerAdapter.key)
         Log.d("username", username.toString())
-//        findFollower(username.toString())
         rcyFollower = view.findViewById(R.id.rcy_follower)
         rcyFollower.setHasFixedSize(true)
         findFollower(username.toString())
@@ -32,7 +32,6 @@ class FollowersFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_followers, container, false)
 
     }
@@ -56,19 +55,33 @@ class FollowersFragment : Fragment() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
+                        if(responseBody.isEmpty()){
+                            showError()
+                        }else{
+                            val txtErrorFollower = view?.findViewById<TextView>(R.id.FollowerTextError)
+                            txtErrorFollower?.text = ""
+                        }
                         showRecyclerList(responseBody)
+                    }else{
+                        showError()
                     }
                 } else {
-                    Log.e("coba1", "onFailure: ${response.message()}")
+                    showError()
+                    Log.e("LogPertama", "onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<ArrayList<FollowResponseItem>>, t: Throwable) {
+                showError()
                 showLoading(false)
-                Log.e("Coba2", "onFailure: ${t.message}")
+                Log.e("LogKedua", "onFailure: ${t.message}")
             }
         })
     }
 
+    fun showError(){
+        val txtErrorFollower = view?.findViewById<TextView>(R.id.FollowerTextError)
+        txtErrorFollower?.text = "Tidak Memiliki Follower/Internet Buruk"
+    }
     private fun showLoading(isLoading: Boolean) {
         val pb = view?.findViewById<ProgressBar>(R.id.progressBar2)
         if (isLoading) {

@@ -18,11 +18,13 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
 
+    companion object{
+        const val rcv = "RECYCLER"
+    }
 
+    private lateinit var arrayData: ArrayList<ItemsItem>
     private lateinit var binding: ActivityMainBinding
-
     private lateinit var rcyUser: RecyclerView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +32,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        supportActionBar?.hide()
-
         rcyUser = findViewById(R.id.rcyUser)
         rcyUser.setHasFixedSize(true)
 
-        findUser("farel")
+        if (savedInstanceState != null) {
+            savedInstanceState.getParcelableArrayList<ItemsItem>(rcv)?.let { showRecyclerList(it) }
+        }else{
+            findUser("")
+        }
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(rcv, arrayData)
     }
 
     private fun findUser(cariUser: String) {
@@ -50,17 +60,30 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
+                        if (responseBody.items.isEmpty()){
+                            showEror()
+                        }else{
+                            binding.textEror.text = ""
+                        }
                         showRecyclerList(responseBody.items)
+                    }else{
+                        showEror()
                     }
                 } else {
+                    showEror()
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                showEror()
                 showLoading(false)
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
+    }
+
+    private fun showEror(){
+        binding.textEror.text = getString(R.string.pesan_error_main)
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -71,12 +94,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private  fun showRecyclerList(isi: ArrayList<ItemsItem>){
         rcyUser.layoutManager = LinearLayoutManager(this)
         val listUserAdapter = ListGHuserAdapter(isi)
+        arrayData = isi
         rcyUser.adapter  = listUserAdapter
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -89,19 +112,13 @@ class MainActivity : AppCompatActivity() {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.queryHint = resources.getString(R.string.search_hint)
         searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            /*
-            Gunakan method ini ketika search selesai atau OK
-             */
+
             override fun onQueryTextSubmit(query: String): Boolean {
-//                Toast.makeText(this@MainActivity, query, Toast.LENGTH_SHORT).show()
                 findUser(query)
                 searchView.clearFocus()
                 return true
             }
 
-            /*
-            Gunakan method ini untuk merespon tiap perubahan huruf pada searchView
-             */
             override fun onQueryTextChange(newText: String): Boolean {
                 return false
             }

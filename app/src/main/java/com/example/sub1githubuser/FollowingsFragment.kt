@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +33,6 @@ class FollowingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_followings, container, false)
 
     }
@@ -56,17 +56,32 @@ class FollowingsFragment : Fragment() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
+                        if (responseBody.isEmpty()){
+                            showError()
+                        }else{
+                            val txtErrorFollowing = view?.findViewById<TextView>(R.id.FollowingTextError)
+                            txtErrorFollowing?.text = ""
+                        }
                         showRecyclerList(responseBody)
+                    }else{
+                        showError()
                     }
                 } else {
-                    Log.e("coba1", "onFailure: ${response.message()}")
+                    showError()
+                    Log.e("LogPertama","onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<ArrayList<FollowResponseItem>>, t: Throwable) {
+                showError()
                 showLoading(false)
-                Log.e("Coba2", "onFailure: ${t.message}")
+                Log.e("LogKedua", "onFailure: ${t.message}")
             }
         })
+    }
+
+    fun showError(){
+        val txtErrorFollowing = view?.findViewById<TextView>(R.id.FollowingTextError)
+        txtErrorFollowing?.text = "Tidak Memiliki Following/Internet Buruk"
     }
 
     private fun showLoading(isLoading: Boolean) {

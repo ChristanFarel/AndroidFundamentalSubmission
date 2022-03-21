@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sub1GitHubUser</string>
+    <string name="app_name">GitHubUser</string>
     <string name="search_hint">Cari...</string>
     <string name="user_detail">Github User Detail</string>
     <string name="github_user_detail">Github User Detail</string>
@@ -7,5 +7,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tab_followers">Followers</string>
     <string name="tab_following">Following</string>
+    <string name="pesan_error_main">Data tidak ditemukan silahkan cari!</string>
 
 </resources>

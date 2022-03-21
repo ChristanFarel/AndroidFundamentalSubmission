@@ -12,11 +12,6 @@ class FolAdapter (private val listUser: ArrayList<FollowResponseItem>) : Recycle
     class ListViewHolder(var binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root)
 
 
-    private lateinit var onItemClickCallback: FolAdapter.OnItemClickCallback
-
-    fun setOnItemClickCallback(onItemClickCallback: FolAdapter.OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FolAdapter.ListViewHolder {
         val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -47,9 +42,7 @@ class FolAdapter (private val listUser: ArrayList<FollowResponseItem>) : Recycle
 
     override fun getItemCount(): Int = listUser.size
 
-    interface OnItemClickCallback {
-        fun onItemClicked(data: GHuser)
-    }
+
 
 
 }

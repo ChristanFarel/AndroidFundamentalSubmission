@@ -7,17 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sub1githubuser.databinding.ItemUserBinding
 
-class ListGHuserAdapter(private val listUser: ArrayList<ItemsItem>) :  RecyclerView.Adapter<ListGHuserAdapter.ListViewHolder>(){
+class ListGHuserAdapter( private val listUser: ArrayList<ItemsItem>) :  RecyclerView.Adapter<ListGHuserAdapter.ListViewHolder>(){
 
     companion object{
         const val USERNAME = "USERNAME"
-    }
-
-
-    private lateinit var onItemClickCallback: OnItemClickCallback
-
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
     }
 
     class ListViewHolder(var binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root)
@@ -36,7 +29,6 @@ class ListGHuserAdapter(private val listUser: ArrayList<ItemsItem>) :  RecyclerV
 
         holder.binding.itemUsername.text = username
 
-
         holder.itemView.setOnClickListener{
 
             val intent = Intent(holder.itemView.context ,DetailUser::class.java)
@@ -50,8 +42,6 @@ class ListGHuserAdapter(private val listUser: ArrayList<ItemsItem>) :  RecyclerV
 
     override fun getItemCount(): Int = listUser.size
 
-    interface OnItemClickCallback {
-        fun onItemClicked(data: GHuser)
-    }
+
 
 }

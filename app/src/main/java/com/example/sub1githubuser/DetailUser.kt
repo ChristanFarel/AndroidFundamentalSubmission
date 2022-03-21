@@ -33,9 +33,7 @@ class DetailUser : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.setTitle(getString(R.string.github_user_detail))
-
-
+        supportActionBar?.title = getString(R.string.github_user_detail)
 
 
         binding = ActivityDetailUserBinding.inflate(layoutInflater)
@@ -75,8 +73,8 @@ class DetailUser : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
-//                            showRecyclerList(responseBody.items)
                         binding.detailUsername.text = responseBody.login
+
                         if(responseBody.company != null ){
                             binding.detailCompany.text = responseBody.company
                         } else{
@@ -91,6 +89,13 @@ class DetailUser : AppCompatActivity() {
                             binding.detailLocation.text = responseBody.location.toString()
                         }
                         binding.detailRepository.text = responseBody.publicRepos.toString()
+
+                        if(responseBody.name != null){
+                            binding.detaiNama.text = responseBody.name.toString()
+                        }else{
+                            binding.detaiNama.text = "Unidentified name"
+                        }
+
 
                         Glide.with(this@DetailUser)
                             .load(responseBody.avatarUrl)

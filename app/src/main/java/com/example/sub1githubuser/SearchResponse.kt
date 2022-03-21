@@ -1,6 +1,8 @@
 package com.example.sub1githubuser
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class SearchResponse(
 
@@ -14,6 +16,7 @@ data class SearchResponse(
 	val items: ArrayList<ItemsItem>
 )
 
+@Parcelize
 data class ItemsItem(
 
 	@field:SerializedName("login")
@@ -22,4 +25,4 @@ data class ItemsItem(
 	@field:SerializedName("avatar_url")
 	val avatarUrl: String,
 
-)
+) : Parcelable
