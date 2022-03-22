@@ -3,9 +3,11 @@ package com.example.sub1githubuser
 import android.app.SearchManager
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,18 +37,18 @@ class MainActivity : AppCompatActivity() {
         rcyUser = findViewById(R.id.rcyUser)
         rcyUser.setHasFixedSize(true)
 
-        if (savedInstanceState != null) {
-            savedInstanceState.getParcelableArrayList<ItemsItem>(rcv)?.let { showRecyclerList(it) }
-        }else{
-            findUser("")
-        }
-
+//        if (savedInstanceState != null) {
+//            savedInstanceState.getParcelableArrayList<ItemsItem>(rcv)?.let { showRecyclerList(it) }
+//        }else{
+//            findUser("")
+//        }
+        findUser("")
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(rcv, arrayData)
-    }
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        outState.putParcelableArrayList(rcv, arrayData)
+//    }
 
     private fun findUser(cariUser: String) {
         showLoading(true)
@@ -126,7 +128,16 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.setting -> {
+                val i = Intent(this, SettingActivity::class.java)
+                startActivity(i)
+                return true
+            }
+            else -> return true
+        }
+    }
 
 
 }
