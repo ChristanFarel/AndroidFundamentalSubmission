@@ -1,14 +1,22 @@
-package com.example.sub1githubuser
+package com.example.sub1githubuser.ui.activity
 
 import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.sub1githubuser.R
+import com.example.sub1githubuser.database.local.entity.FavoriteEntity
+import com.example.sub1githubuser.database.remote.response.DetailResponse
+import com.example.sub1githubuser.database.remote.retrofit.ApiConfig
 import com.example.sub1githubuser.databinding.ActivityDetailUserBinding
+import com.example.sub1githubuser.repository.FavRepository
+import com.example.sub1githubuser.ui.adapter.ListGHuserAdapter
+import com.example.sub1githubuser.ui.adapter.SectionsPagerAdapter
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -17,7 +25,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class DetailUser : AppCompatActivity() {
+class DetailUserActivity : AppCompatActivity() {
+
+    private var favorite: FavoriteEntity? = null
 
     companion object {
         @StringRes
@@ -33,6 +43,8 @@ class DetailUser : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val mNoteRepository: FavRepository = FavRepository(application)
+
         supportActionBar?.title = getString(R.string.github_user_detail)
 
 
@@ -46,8 +58,10 @@ class DetailUser : AppCompatActivity() {
 
         val username = intent.getStringExtra(ListGHuserAdapter.USERNAME)
 
+
         if (username != null) {
             detail(username)
+//            favorite= FavoriteEntity(0,"Farel","haha",true)
         }
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
@@ -58,6 +72,12 @@ class DetailUser : AppCompatActivity() {
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
         supportActionBar?.elevation = 0f
+
+        binding.fabFav.setOnClickListener {
+            favorite?.let { it1 -> mNoteRepository.insert(it1) }
+            Toast.makeText(this,"Berhasil ditambahkan",Toast.LENGTH_LONG).show()
+        }
+
 
     }
 
@@ -97,9 +117,11 @@ class DetailUser : AppCompatActivity() {
                         }
 
 
-                        Glide.with(this@DetailUser)
+                        Glide.with(this@DetailUserActivity)
                             .load(responseBody.avatarUrl)
                             .into(binding.detailGambar)
+
+                        favorite = FavoriteEntity(0,responseBody.login, responseBody.avatarUrl)
 
                     }
                 } else {

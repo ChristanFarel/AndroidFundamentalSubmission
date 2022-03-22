@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/activity_detail_user.xml" value="0.25" />
+        <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/activity_detail_user.xml" value="0.2" />
+        <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/activity_favorite.xml" value="0.13148907103825136" />
         <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/activity_setting.xml" value="0.13148907103825136" />
         <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/activity_splash_screen.xml" value="0.22" />
         <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/fragment_followers.xml" value="0.153125" />
         <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/fragment_followings.xml" value="0.142578125" />
+        <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/item_favorite.xml" value="0.22" />
         <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/item_user.xml" value="0.33" />
         <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/layout/loading_layout.xml" value="0.25" />
         <entry key="..\:/Kuliah/Bangkit/Pembelajaran/AndroidStudio/Sub1GitHubUser/app/src/main/res/menu/search_menu.xml" value="0.153125" />

@@ -1,4 +1,4 @@
-package com.example.sub1githubuser
+package com.example.sub1githubuser.database.remote.retrofit
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

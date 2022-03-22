@@ -1,12 +1,13 @@
-package com.example.sub1githubuser
+package com.example.sub1githubuser.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.sub1githubuser.preferences.SettingPreferences
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val pref: SettingPreferences) : ViewModel() {
+class SetPrefViewModel(private val pref: SettingPreferences) : ViewModel() {
 
     fun getThemeSettings(): LiveData<Boolean> {
         return pref.getThemeSetting().asLiveData()

@@ -1,5 +1,8 @@
-package com.example.sub1githubuser
+package com.example.sub1githubuser.database.remote.retrofit
 
+import com.example.sub1githubuser.database.remote.response.DetailResponse
+import com.example.sub1githubuser.FollowResponseItem
+import com.example.sub1githubuser.SearchResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

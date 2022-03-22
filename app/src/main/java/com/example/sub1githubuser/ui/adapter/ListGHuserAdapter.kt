@@ -1,11 +1,13 @@
-package com.example.sub1githubuser
+package com.example.sub1githubuser.ui.adapter
 
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.sub1githubuser.ItemsItem
 import com.example.sub1githubuser.databinding.ItemUserBinding
+import com.example.sub1githubuser.ui.activity.DetailUserActivity
 
 class ListGHuserAdapter( private val listUser: ArrayList<ItemsItem>) :  RecyclerView.Adapter<ListGHuserAdapter.ListViewHolder>(){
 
@@ -31,7 +33,7 @@ class ListGHuserAdapter( private val listUser: ArrayList<ItemsItem>) :  Recycler
 
         holder.itemView.setOnClickListener{
 
-            val intent = Intent(holder.itemView.context ,DetailUser::class.java)
+            val intent = Intent(holder.itemView.context , DetailUserActivity::class.java)
             intent.putExtra(USERNAME, username)
             SectionsPagerAdapter.username = username
             holder.itemView.context.startActivity(intent)

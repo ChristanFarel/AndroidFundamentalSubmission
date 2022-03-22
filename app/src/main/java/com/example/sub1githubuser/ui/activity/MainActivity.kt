@@ -1,4 +1,4 @@
-package com.example.sub1githubuser
+package com.example.sub1githubuser.ui.activity
 
 import android.app.SearchManager
 import android.content.ContentValues.TAG
@@ -12,7 +12,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sub1githubuser.ItemsItem
+import com.example.sub1githubuser.R
+import com.example.sub1githubuser.SearchResponse
+import com.example.sub1githubuser.database.remote.retrofit.ApiConfig
 import com.example.sub1githubuser.databinding.ActivityMainBinding
+import com.example.sub1githubuser.ui.adapter.ListGHuserAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -132,6 +137,12 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId){
             R.id.setting -> {
                 val i = Intent(this, SettingActivity::class.java)
+                startActivity(i)
+                return true
+            }
+
+            R.id.fav -> {
+                val i = Intent(this, FavoriteActivity::class.java)
                 startActivity(i)
                 return true
             }

@@ -1,4 +1,4 @@
-package com.example.sub1githubuser
+package com.example.sub1githubuser.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +10,16 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sub1githubuser.FollowResponseItem
+import com.example.sub1githubuser.R
+import com.example.sub1githubuser.database.remote.retrofit.ApiConfig
+import com.example.sub1githubuser.ui.adapter.FolAdapter
+import com.example.sub1githubuser.ui.adapter.SectionsPagerAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
-class FollowingsFragment : Fragment() {
+class FollowersFragment : Fragment() {
 
     private lateinit var rcyFollower: RecyclerView
 
@@ -24,7 +28,7 @@ class FollowingsFragment : Fragment() {
 
         val username = arguments?.getString(SectionsPagerAdapter.key)
         Log.d("username", username.toString())
-        rcyFollower = view.findViewById(R.id.rcy_following)
+        rcyFollower = view.findViewById(R.id.rcy_follower)
         rcyFollower.setHasFixedSize(true)
         findFollower(username.toString())
 
@@ -33,7 +37,7 @@ class FollowingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_followings, container, false)
+        return inflater.inflate(R.layout.fragment_followers, container, false)
 
     }
 
@@ -44,9 +48,9 @@ class FollowingsFragment : Fragment() {
 
     }
 
-    private fun findFollower(cariFollowing: String) {
+    private fun findFollower(cariFollower: String) {
         showLoading(true)
-        val client = ApiConfig.getApiService().getFollowing(cariFollowing)
+        val client = ApiConfig.getApiService().getFollower(cariFollower)
         client.enqueue(object : Callback<ArrayList<FollowResponseItem>> {
             override fun onResponse(
                 call: Call<ArrayList<FollowResponseItem>>,
@@ -56,11 +60,11 @@ class FollowingsFragment : Fragment() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
-                        if (responseBody.isEmpty()){
+                        if(responseBody.isEmpty()){
                             showError()
                         }else{
-                            val txtErrorFollowing = view?.findViewById<TextView>(R.id.FollowingTextError)
-                            txtErrorFollowing?.text = ""
+                            val txtErrorFollower = view?.findViewById<TextView>(R.id.FollowerTextError)
+                            txtErrorFollower?.text = ""
                         }
                         showRecyclerList(responseBody)
                     }else{
@@ -68,7 +72,7 @@ class FollowingsFragment : Fragment() {
                     }
                 } else {
                     showError()
-                    Log.e("LogPertama","onFailure: ${response.message()}")
+                    Log.e("LogPertama", "onFailure: ${response.message()}")
                 }
             }
             override fun onFailure(call: Call<ArrayList<FollowResponseItem>>, t: Throwable) {
@@ -80,18 +84,16 @@ class FollowingsFragment : Fragment() {
     }
 
     fun showError(){
-        val txtErrorFollowing = view?.findViewById<TextView>(R.id.FollowingTextError)
-        txtErrorFollowing?.text = "Tidak Memiliki Following/Internet Buruk"
+        val txtErrorFollower = view?.findViewById<TextView>(R.id.FollowerTextError)
+        txtErrorFollower?.text = "Tidak Memiliki Follower/Internet Buruk"
     }
-
     private fun showLoading(isLoading: Boolean) {
-        val pb = view?.findViewById<ProgressBar>(R.id.progressBar3)
+        val pb = view?.findViewById<ProgressBar>(R.id.progressBar2)
         if (isLoading) {
-            pb?.visibility = View.VISIBLE
+           pb?.visibility = View.VISIBLE
         } else {
             pb?.visibility = View.GONE
         }
     }
-
 
 }
