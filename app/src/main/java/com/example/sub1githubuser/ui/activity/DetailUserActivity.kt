@@ -1,12 +1,16 @@
 package com.example.sub1githubuser.ui.activity
 
 import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.example.sub1githubuser.R
@@ -43,7 +47,7 @@ class DetailUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        val mNoteRepository: FavRepository = FavRepository(application)
+
         val mfavRepository = Injection.provideRepository(this)
 
         supportActionBar?.title = getString(R.string.github_user_detail)
@@ -73,13 +77,34 @@ class DetailUserActivity : AppCompatActivity() {
         }.attach()
         supportActionBar?.elevation = 0f
 
-        binding.fabFav.setOnClickListener {
-            favorite?.let { it1 -> mfavRepository.insert(it1) }
-            Toast.makeText(this,"Berhasil ditambahkan",Toast.LENGTH_LONG).show()
-        }
+
+        mfavRepository.getUserName(username.toString()).observe(this,{ checked ->
+            binding.fabFav.setOnClickListener {
+                if(checked){
+                    binding.fabFav.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            this, R.drawable.ic_baseline_favorite_border_24
+                        )
+                    )
+                    favorite?.let { it1 -> mfavRepository.delete(it1)}
+                    Toast.makeText(this,"Berhasil dihapus",Toast.LENGTH_LONG).show()
+                } else{
+
+                    binding.fabFav.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            this, R.drawable.ic_baseline_favorite_24
+                        )
+                    )
+                    favorite?.let { it1 -> mfavRepository.insert(it1) }
+                    Toast.makeText(this,"Berhasil ditambahkan", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
 
 
     }
+
+
 
     private fun detail(cariUser: String) {
         showLoading(true)
@@ -143,6 +168,34 @@ class DetailUserActivity : AppCompatActivity() {
             shimLayout.stopShimmer()
             shimLayout.visibility = View.GONE
 
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.detail_menu, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.homeInDetail -> {
+                val i = Intent(this, MainActivity::class.java)
+                startActivity(i)
+                return true
+            }
+            R.id.settingInDetail -> {
+                val i = Intent(this, SettingActivity::class.java)
+                startActivity(i)
+                return true
+            }
+            R.id.favInDetail -> {
+                val i = Intent(this, FavoriteActivity::class.java)
+                startActivity(i)
+                return true
+            }
+            else -> return true
         }
     }
 }

@@ -24,12 +24,6 @@ abstract class FavDatabase : RoomDatabase() {
             }
             return instance as FavDatabase
         }
-//            instance ?: synchronized(this) {
-//                instance ?: Room.databaseBuilder(
-//                    context.applicationContext,
-//                    FavDatabase::class.java, "Fav.db"
-//                ).build()
-//            }
 
     }
 }

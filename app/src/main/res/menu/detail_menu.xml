@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/homeInDetail"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Menu Awal"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/settingInDetail"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="Pengaturan"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/favInDetail"
+        android:icon="@drawable/ic_baseline_favorite_24"
+        android:title="Favorite"
+        app:showAsAction="always"
+        />
+
+</menu>

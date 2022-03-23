@@ -36,6 +36,8 @@ class FavRepository(private val apiService: ApiService,
 
     fun getAll(): LiveData<List<FavoriteEntity>> = favDao.getFav()
 
+    fun getUserName(userName: String): LiveData<Boolean> = favDao.checkUserName(userName)
+
     companion object {
         @Volatile
         private var instance: FavRepository? = null
