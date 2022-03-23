@@ -8,5 +8,6 @@
     <string name="tab_followers">Followers</string>
     <string name="tab_following">Following</string>
     <string name="pesan_error_main">Data tidak ditemukan silahkan cari!</string>
+    <string name="dark_theme">Dark Theme</string>
 
 </resources>

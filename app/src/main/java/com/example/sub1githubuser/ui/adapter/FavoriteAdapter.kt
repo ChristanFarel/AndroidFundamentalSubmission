@@ -1,6 +1,7 @@
 package com.example.sub1githubuser.ui.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,11 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sub1githubuser.database.local.entity.FavoriteEntity
 import com.example.sub1githubuser.databinding.ItemFavoriteBinding
+import com.example.sub1githubuser.ui.activity.DetailUserActivity
 
 // Dimasukkan menjadi parameter harusnya(private val onBookmarkClick: (FavoriteEntity) -> Unit)
-class FavoriteAdapter : ListAdapter<FavoriteEntity, FavoriteAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class FavoriteAdapter(private val onFavClick: (FavoriteEntity) -> Unit) : ListAdapter<FavoriteEntity, FavoriteAdapter.MyViewHolder>(DIFF_CALLBACK) {
+
 
     class MyViewHolder(val binding: ItemFavoriteBinding): RecyclerView.ViewHolder(
+
         binding.root
     ){
         fun bind(favs: FavoriteEntity){
@@ -22,6 +26,7 @@ class FavoriteAdapter : ListAdapter<FavoriteEntity, FavoriteAdapter.MyViewHolder
                 .load(favs.urlToImage)
                 .into(binding.itemGambarFavorite)
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -32,6 +37,17 @@ class FavoriteAdapter : ListAdapter<FavoriteEntity, FavoriteAdapter.MyViewHolder
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val fav = getItem(position)
         holder.bind(fav)
+
+        holder.binding.btnHapus.setOnClickListener {
+            onFavClick(fav)
+        }
+
+        holder.itemView.setOnClickListener{
+            val intent = Intent(holder.itemView.context , DetailUserActivity::class.java)
+            intent.putExtra(ListGHuserAdapter.USERNAME, fav.username)
+            SectionsPagerAdapter.username = fav.username.toString()
+            holder.itemView.context.startActivity(intent)
+        }
     }
 
     companion object {

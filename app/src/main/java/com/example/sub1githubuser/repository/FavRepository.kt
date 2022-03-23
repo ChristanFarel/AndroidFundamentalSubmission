@@ -1,31 +1,51 @@
 package com.example.sub1githubuser.repository
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import com.example.sub1githubuser.database.local.entity.FavoriteEntity
-import com.example.sub1githubuser.database.local.room.FavDatabase
 import com.example.sub1githubuser.database.local.room.FavoriteDao
+import com.example.sub1githubuser.database.remote.retrofit.ApiService
+import com.example.sub1githubuser.util.AppExecutors
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class FavRepository(application: Application){
-    private val mFavDao: FavoriteDao
+//application: Application
+class FavRepository(private val apiService: ApiService,
+                    private val favDao: FavoriteDao,
+                    private val appExecutors: AppExecutors){
+//    private val mFavDao: FavoriteDao
     private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
 
-    init {
-        val db = FavDatabase.getDatabase(application)
-        mFavDao = db.favDao()
-    }
+//    init {
+//        val db = FavDatabase.getDatabase(application)
+//        mFavDao = db.favDao()
+//    }
 
 //    fun getAllFav(): LiveData<List<FavoriteEntity>> = mFavDao.getChoosedFav()
 
     fun insert(fav: FavoriteEntity){
-        executorService.execute{mFavDao.insertFav(fav)}
+        appExecutors.diskIO.execute{
+            favDao.insertFav(fav)
+        }
     }
 
     fun delete(fav: FavoriteEntity){
-        executorService.execute{mFavDao.delete(fav)}
+        appExecutors.diskIO.execute{
+            favDao.delete(fav)
+        }
     }
 
-    fun getAll(): LiveData<List<FavoriteEntity>> = mFavDao.getFav()
+    fun getAll(): LiveData<List<FavoriteEntity>> = favDao.getFav()
+
+    companion object {
+        @Volatile
+        private var instance: FavRepository? = null
+        fun getInstance(
+            apiService: ApiService,
+            favDao: FavoriteDao,
+            appExecutors: AppExecutors
+        ): FavRepository =
+            instance ?: synchronized(this) {
+                instance ?: FavRepository(apiService, favDao, appExecutors)
+            }.also { instance = it }
+    }
 }

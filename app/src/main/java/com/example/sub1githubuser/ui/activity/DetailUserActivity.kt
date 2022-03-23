@@ -14,7 +14,7 @@ import com.example.sub1githubuser.database.local.entity.FavoriteEntity
 import com.example.sub1githubuser.database.remote.response.DetailResponse
 import com.example.sub1githubuser.database.remote.retrofit.ApiConfig
 import com.example.sub1githubuser.databinding.ActivityDetailUserBinding
-import com.example.sub1githubuser.repository.FavRepository
+import com.example.sub1githubuser.di.Injection
 import com.example.sub1githubuser.ui.adapter.ListGHuserAdapter
 import com.example.sub1githubuser.ui.adapter.SectionsPagerAdapter
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -43,7 +43,8 @@ class DetailUserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val mNoteRepository: FavRepository = FavRepository(application)
+//        val mNoteRepository: FavRepository = FavRepository(application)
+        val mfavRepository = Injection.provideRepository(this)
 
         supportActionBar?.title = getString(R.string.github_user_detail)
 
@@ -61,7 +62,6 @@ class DetailUserActivity : AppCompatActivity() {
 
         if (username != null) {
             detail(username)
-//            favorite= FavoriteEntity(0,"Farel","haha",true)
         }
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
@@ -74,7 +74,7 @@ class DetailUserActivity : AppCompatActivity() {
         supportActionBar?.elevation = 0f
 
         binding.fabFav.setOnClickListener {
-            favorite?.let { it1 -> mNoteRepository.insert(it1) }
+            favorite?.let { it1 -> mfavRepository.insert(it1) }
             Toast.makeText(this,"Berhasil ditambahkan",Toast.LENGTH_LONG).show()
         }
 
@@ -121,7 +121,7 @@ class DetailUserActivity : AppCompatActivity() {
                             .load(responseBody.avatarUrl)
                             .into(binding.detailGambar)
 
-                        favorite = FavoriteEntity(0,responseBody.login, responseBody.avatarUrl)
+                        favorite = FavoriteEntity(responseBody.login, responseBody.avatarUrl)
 
                     }
                 } else {
