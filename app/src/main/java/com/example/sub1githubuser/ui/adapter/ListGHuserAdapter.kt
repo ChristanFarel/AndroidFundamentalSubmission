@@ -9,11 +9,9 @@ import com.example.sub1githubuser.ItemsItem
 import com.example.sub1githubuser.databinding.ItemUserBinding
 import com.example.sub1githubuser.ui.activity.DetailUserActivity
 
-class ListGHuserAdapter( private val listUser: ArrayList<ItemsItem>) :  RecyclerView.Adapter<ListGHuserAdapter.ListViewHolder>(){
+class ListGHuserAdapter(private val listUser: ArrayList<ItemsItem>) :
+    RecyclerView.Adapter<ListGHuserAdapter.ListViewHolder>() {
 
-    companion object{
-        const val USERNAME = "USERNAME"
-    }
 
     class ListViewHolder(var binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -23,7 +21,7 @@ class ListGHuserAdapter( private val listUser: ArrayList<ItemsItem>) :  Recycler
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val (username, foto,) = listUser[position]
+        val (username, foto) = listUser[position]
 
         Glide.with(holder.itemView.context)
             .load(foto)
@@ -31,9 +29,9 @@ class ListGHuserAdapter( private val listUser: ArrayList<ItemsItem>) :  Recycler
 
         holder.binding.itemUsername.text = username
 
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
 
-            val intent = Intent(holder.itemView.context , DetailUserActivity::class.java)
+            val intent = Intent(holder.itemView.context, DetailUserActivity::class.java)
             intent.putExtra(USERNAME, username)
             SectionsPagerAdapter.username = username
             holder.itemView.context.startActivity(intent)
@@ -44,6 +42,9 @@ class ListGHuserAdapter( private val listUser: ArrayList<ItemsItem>) :  Recycler
 
     override fun getItemCount(): Int = listUser.size
 
+    companion object {
+        const val USERNAME = "USERNAME"
+    }
 
 
 }

@@ -9,7 +9,8 @@ import com.example.sub1githubuser.FollowResponseItem
 import com.example.sub1githubuser.databinding.ItemUserBinding
 import com.example.sub1githubuser.ui.activity.DetailUserActivity
 
-class FolAdapter (private val listUser: ArrayList<FollowResponseItem>) : RecyclerView.Adapter<FolAdapter.ListViewHolder>(){
+class FolAdapter(private val listUser: ArrayList<FollowResponseItem>) :
+    RecyclerView.Adapter<FolAdapter.ListViewHolder>() {
 
     class ListViewHolder(var binding: ItemUserBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -31,9 +32,9 @@ class FolAdapter (private val listUser: ArrayList<FollowResponseItem>) : Recycle
         holder.binding.itemUsername.text = username
 
 
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
 
-            val intent = Intent(holder.itemView.context , DetailUserActivity::class.java)
+            val intent = Intent(holder.itemView.context, DetailUserActivity::class.java)
             intent.putExtra(ListGHuserAdapter.USERNAME, username)
             SectionsPagerAdapter.username = username
             holder.itemView.context.startActivity(intent)
@@ -42,8 +43,6 @@ class FolAdapter (private val listUser: ArrayList<FollowResponseItem>) : Recycle
     }
 
     override fun getItemCount(): Int = listUser.size
-
-
 
 
 }

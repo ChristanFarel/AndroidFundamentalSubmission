@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.sub1githubuser.FollowResponseItem
 import com.example.sub1githubuser.R
 import com.example.sub1githubuser.database.remote.retrofit.ApiConfig
+import com.example.sub1githubuser.databinding.FragmentFollowersBinding
 import com.example.sub1githubuser.ui.adapter.FolAdapter
 import com.example.sub1githubuser.ui.adapter.SectionsPagerAdapter
 import retrofit2.Call
@@ -21,30 +20,31 @@ import retrofit2.Response
 
 class FollowersFragment : Fragment() {
 
-    private lateinit var rcyFollower: RecyclerView
+    private var _binding: FragmentFollowersBinding? = null
+    private val binding get() = _binding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val username = arguments?.getString(SectionsPagerAdapter.key)
-        Log.d("username", username.toString())
-        rcyFollower = view.findViewById(R.id.rcy_follower)
-        rcyFollower.setHasFixedSize(true)
+
         findFollower(username.toString())
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_followers, container, false)
+        _binding = FragmentFollowersBinding.inflate(inflater, container, false)
+        return binding?.root
 
     }
 
-    private  fun showRecyclerList(isi: ArrayList<FollowResponseItem>){
-        rcyFollower.layoutManager = LinearLayoutManager(requireActivity())
-        val listFolAdapter = FolAdapter(isi)
-        rcyFollower.adapter  = listFolAdapter
+    private fun showRecyclerList(isi: ArrayList<FollowResponseItem>) {
+        binding?.rcyFollower?.setHasFixedSize(true)
+        binding?.rcyFollower?.layoutManager = LinearLayoutManager(requireActivity())
+        binding?.rcyFollower?.adapter = FolAdapter(isi)
 
     }
 
@@ -60,14 +60,13 @@ class FollowersFragment : Fragment() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
-                        if(responseBody.isEmpty()){
+                        if (responseBody.isEmpty()) {
                             showError()
-                        }else{
-                            val txtErrorFollower = view?.findViewById<TextView>(R.id.FollowerTextError)
-                            txtErrorFollower?.text = ""
+                        } else {
+                            binding?.FollowerTextError?.text = ""
                         }
                         showRecyclerList(responseBody)
-                    }else{
+                    } else {
                         showError()
                     }
                 } else {
@@ -75,6 +74,7 @@ class FollowersFragment : Fragment() {
                     Log.e("LogPertama", "onFailure: ${response.message()}")
                 }
             }
+
             override fun onFailure(call: Call<ArrayList<FollowResponseItem>>, t: Throwable) {
                 showError()
                 showLoading(false)
@@ -83,14 +83,14 @@ class FollowersFragment : Fragment() {
         })
     }
 
-    fun showError(){
-        val txtErrorFollower = view?.findViewById<TextView>(R.id.FollowerTextError)
-        txtErrorFollower?.text = "Tidak Memiliki Follower/Internet Buruk"
+    fun showError() {
+        binding?.FollowerTextError?.text = getString(R.string.pesan_errro)
     }
+
     private fun showLoading(isLoading: Boolean) {
         val pb = view?.findViewById<ProgressBar>(R.id.progressBar2)
         if (isLoading) {
-           pb?.visibility = View.VISIBLE
+            pb?.visibility = View.VISIBLE
         } else {
             pb?.visibility = View.GONE
         }

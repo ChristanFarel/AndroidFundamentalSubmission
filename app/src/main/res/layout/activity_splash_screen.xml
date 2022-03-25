@@ -17,7 +17,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4800000"
-        app:srcCompat="@mipmap/gh_logo_foreground" />
+        app:srcCompat="@mipmap/gh_logo_foreground"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/textView"

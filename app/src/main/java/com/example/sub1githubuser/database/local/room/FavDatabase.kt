@@ -13,12 +13,15 @@ abstract class FavDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var instance: FavDatabase? = null
+
         @JvmStatic
         fun getDatabase(context: Context): FavDatabase {
             if (instance == null) {
                 synchronized(FavDatabase::class.java) {
-                    instance = Room.databaseBuilder(context.applicationContext,
-                        FavDatabase::class.java, "fav_database")
+                    instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        FavDatabase::class.java, "fav_database"
+                    )
                         .build()
                 }
             }

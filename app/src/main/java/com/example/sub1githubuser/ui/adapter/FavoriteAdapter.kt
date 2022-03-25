@@ -12,15 +12,15 @@ import com.example.sub1githubuser.database.local.entity.FavoriteEntity
 import com.example.sub1githubuser.databinding.ItemFavoriteBinding
 import com.example.sub1githubuser.ui.activity.DetailUserActivity
 
-// Dimasukkan menjadi parameter harusnya(private val onBookmarkClick: (FavoriteEntity) -> Unit)
-class FavoriteAdapter(private val onFavClick: (FavoriteEntity) -> Unit) : ListAdapter<FavoriteEntity, FavoriteAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class FavoriteAdapter(private val onFavClick: (FavoriteEntity) -> Unit) :
+    ListAdapter<FavoriteEntity, FavoriteAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
 
-    class MyViewHolder(val binding: ItemFavoriteBinding): RecyclerView.ViewHolder(
+    class MyViewHolder(val binding: ItemFavoriteBinding) : RecyclerView.ViewHolder(
 
         binding.root
-    ){
-        fun bind(favs: FavoriteEntity){
+    ) {
+        fun bind(favs: FavoriteEntity) {
             binding.itemUsernameFavorite.text = favs.username
             Glide.with(itemView.context)
                 .load(favs.urlToImage)
@@ -30,7 +30,8 @@ class FavoriteAdapter(private val onFavClick: (FavoriteEntity) -> Unit) : ListAd
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemFavoriteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemFavoriteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
@@ -42,8 +43,8 @@ class FavoriteAdapter(private val onFavClick: (FavoriteEntity) -> Unit) : ListAd
             onFavClick(fav)
         }
 
-        holder.itemView.setOnClickListener{
-            val intent = Intent(holder.itemView.context , DetailUserActivity::class.java)
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, DetailUserActivity::class.java)
             intent.putExtra(ListGHuserAdapter.USERNAME, fav.username)
             SectionsPagerAdapter.username = fav.username.toString()
             holder.itemView.context.startActivity(intent)
@@ -53,12 +54,18 @@ class FavoriteAdapter(private val onFavClick: (FavoriteEntity) -> Unit) : ListAd
     companion object {
         val DIFF_CALLBACK: DiffUtil.ItemCallback<FavoriteEntity> =
             object : DiffUtil.ItemCallback<FavoriteEntity>() {
-                override fun areItemsTheSame(oldFav: FavoriteEntity, newFav: FavoriteEntity): Boolean {
+                override fun areItemsTheSame(
+                    oldFav: FavoriteEntity,
+                    newFav: FavoriteEntity
+                ): Boolean {
                     return oldFav.username == newFav.username
                 }
 
                 @SuppressLint("DiffUtilEquals")
-                override fun areContentsTheSame(oldFav: FavoriteEntity, newFav: FavoriteEntity): Boolean {
+                override fun areContentsTheSame(
+                    oldFav: FavoriteEntity,
+                    newFav: FavoriteEntity
+                ): Boolean {
                     return oldFav == newFav
                 }
             }

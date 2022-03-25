@@ -19,6 +19,7 @@ import com.example.sub1githubuser.database.remote.response.DetailResponse
 import com.example.sub1githubuser.database.remote.retrofit.ApiConfig
 import com.example.sub1githubuser.databinding.ActivityDetailUserBinding
 import com.example.sub1githubuser.di.Injection
+import com.example.sub1githubuser.repository.FavRepository
 import com.example.sub1githubuser.ui.adapter.ListGHuserAdapter
 import com.example.sub1githubuser.ui.adapter.SectionsPagerAdapter
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -32,26 +33,17 @@ import retrofit2.Response
 class DetailUserActivity : AppCompatActivity() {
 
     private var favorite: FavoriteEntity? = null
-
-    companion object {
-        @StringRes
-        private val TAB_TITLES = intArrayOf(
-            R.string.tab_followers,
-            R.string.tab_following
-        )
-    }
-
     private lateinit var shimLayout: ShimmerFrameLayout
-
     private lateinit var binding: ActivityDetailUserBinding
+    private var username: String? = null
+    private lateinit var mfavRepository: FavRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
-        val mfavRepository = Injection.provideRepository(this)
+        mfavRepository = Injection.provideRepository(this)
 
         supportActionBar?.title = getString(R.string.github_user_detail)
-
 
         binding = ActivityDetailUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -60,13 +52,9 @@ class DetailUserActivity : AppCompatActivity() {
 
         shimLayout.startShimmer()
 
+        username = intent.getStringExtra(ListGHuserAdapter.USERNAME)
 
-        val username = intent.getStringExtra(ListGHuserAdapter.USERNAME)
-
-
-        if (username != null) {
-            detail(username)
-        }
+        username?.let { detail(it) }
 
         val sectionsPagerAdapter = SectionsPagerAdapter(this)
         val viewPager: ViewPager2 = findViewById(R.id.view_pager)
@@ -77,33 +65,50 @@ class DetailUserActivity : AppCompatActivity() {
         }.attach()
         supportActionBar?.elevation = 0f
 
-
-        mfavRepository.getUserName(username.toString()).observe(this,{ checked ->
+        mfavRepository.getUserName(username.toString()).observe(this, { checked ->
             binding.fabFav.setOnClickListener {
-                if(checked){
-                    binding.fabFav.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            this, R.drawable.ic_baseline_favorite_border_24
-                        )
-                    )
-                    favorite?.let { it1 -> mfavRepository.delete(it1)}
-                    Toast.makeText(this,"Berhasil dihapus",Toast.LENGTH_LONG).show()
-                } else{
-
+                if (checked) {
                     binding.fabFav.setImageDrawable(
                         ContextCompat.getDrawable(
                             this, R.drawable.ic_baseline_favorite_24
                         )
                     )
+                    favorite?.let { it1 -> mfavRepository.delete(it1) }
+                    Toast.makeText(this, "Berhasil dihapus", Toast.LENGTH_LONG).show()
+                } else {
+                    binding.fabFav.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            this, R.drawable.ic_baseline_favorite_border_24
+                        )
+                    )
+
                     favorite?.let { it1 -> mfavRepository.insert(it1) }
-                    Toast.makeText(this,"Berhasil ditambahkan", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Berhasil ditambahkan", Toast.LENGTH_LONG).show()
                 }
             }
         })
 
-
     }
 
+    override fun onResume() {
+        super.onResume()
+        mfavRepository.getUserName(username.toString()).observe(this, { checked ->
+            if (checked) {
+                binding.fabFav.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this, R.drawable.ic_baseline_favorite_24
+                    )
+                )
+            } else {
+                binding.fabFav.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this, R.drawable.ic_baseline_favorite_border_24
+                    )
+                )
+
+            }
+        })
+    }
 
 
     private fun detail(cariUser: String) {
@@ -120,24 +125,24 @@ class DetailUserActivity : AppCompatActivity() {
                     if (responseBody != null) {
                         binding.detailUsername.text = responseBody.login
 
-                        if(responseBody.company != null ){
+                        if (responseBody.company != null) {
                             binding.detailCompany.text = responseBody.company
-                        } else{
+                        } else {
                             binding.detailCompany.text = "Unidentified"
                         }
 
                         binding.detailFollower.text = responseBody.followers.toString()
                         binding.detailFollowing.text = responseBody.following.toString()
-                        if (responseBody.location == null){
+                        if (responseBody.location == null) {
                             binding.detailLocation.text = "Unidentified"
-                        } else{
+                        } else {
                             binding.detailLocation.text = responseBody.location.toString()
                         }
                         binding.detailRepository.text = responseBody.publicRepos.toString()
 
-                        if(responseBody.name != null){
+                        if (responseBody.name != null) {
                             binding.detaiNama.text = responseBody.name.toString()
-                        }else{
+                        } else {
                             binding.detaiNama.text = "Unidentified name"
                         }
 
@@ -153,6 +158,7 @@ class DetailUserActivity : AppCompatActivity() {
                     Log.e(ContentValues.TAG, "onFailure: ${response.message()}")
                 }
             }
+
             override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
                 showLoading(false)
                 Log.e(ContentValues.TAG, "onFailure: ${t.message}")
@@ -171,7 +177,7 @@ class DetailUserActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.detail_menu, menu)
 
@@ -179,7 +185,7 @@ class DetailUserActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             R.id.homeInDetail -> {
                 val i = Intent(this, MainActivity::class.java)
                 startActivity(i)
@@ -197,5 +203,13 @@ class DetailUserActivity : AppCompatActivity() {
             }
             else -> return true
         }
+    }
+
+    companion object {
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.tab_followers,
+            R.string.tab_following
+        )
     }
 }

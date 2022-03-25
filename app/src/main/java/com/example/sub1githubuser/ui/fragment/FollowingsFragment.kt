@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sub1githubuser.FollowResponseItem
 import com.example.sub1githubuser.R
 import com.example.sub1githubuser.database.remote.retrofit.ApiConfig
+import com.example.sub1githubuser.databinding.FragmentFollowingsBinding
 import com.example.sub1githubuser.ui.adapter.FolAdapter
 import com.example.sub1githubuser.ui.adapter.SectionsPagerAdapter
 import retrofit2.Call
@@ -22,31 +22,32 @@ import retrofit2.Response
 
 class FollowingsFragment : Fragment() {
 
+    private var _binding: FragmentFollowingsBinding? = null
+    private val binding get() = _binding
     private lateinit var rcyFollower: RecyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val username = arguments?.getString(SectionsPagerAdapter.key)
-        Log.d("username", username.toString())
-        rcyFollower = view.findViewById(R.id.rcy_following)
-        rcyFollower.setHasFixedSize(true)
+
         findFollower(username.toString())
 
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_followings, container, false)
+        _binding = FragmentFollowingsBinding.inflate(inflater, container, false)
+        return binding?.root
 
     }
 
-    private  fun showRecyclerList(isi: ArrayList<FollowResponseItem>){
-        rcyFollower.layoutManager = LinearLayoutManager(requireActivity())
-        val listFolAdapter = FolAdapter(isi)
-        rcyFollower.adapter  = listFolAdapter
-
+    private fun showRecyclerList(isi: ArrayList<FollowResponseItem>) {
+        binding?.rcyFollowing?.setHasFixedSize(true)
+        binding?.rcyFollowing?.layoutManager = LinearLayoutManager(requireActivity())
+        binding?.rcyFollowing?.adapter = FolAdapter(isi)
     }
 
     private fun findFollower(cariFollowing: String) {
@@ -61,21 +62,21 @@ class FollowingsFragment : Fragment() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
-                        if (responseBody.isEmpty()){
+                        if (responseBody.isEmpty()) {
                             showError()
-                        }else{
-                            val txtErrorFollowing = view?.findViewById<TextView>(R.id.FollowingTextError)
-                            txtErrorFollowing?.text = ""
+                        } else {
+                            binding?.FollowingTextError?.text = ""
                         }
                         showRecyclerList(responseBody)
-                    }else{
+                    } else {
                         showError()
                     }
                 } else {
                     showError()
-                    Log.e("LogPertama","onFailure: ${response.message()}")
+                    Log.e("LogPertama", "onFailure: ${response.message()}")
                 }
             }
+
             override fun onFailure(call: Call<ArrayList<FollowResponseItem>>, t: Throwable) {
                 showError()
                 showLoading(false)
@@ -84,9 +85,8 @@ class FollowingsFragment : Fragment() {
         })
     }
 
-    fun showError(){
-        val txtErrorFollowing = view?.findViewById<TextView>(R.id.FollowingTextError)
-        txtErrorFollowing?.text = "Tidak Memiliki Following/Internet Buruk"
+    fun showError() {
+        binding?.FollowingTextError?.text = getString(R.string.error_following)
     }
 
     private fun showLoading(isLoading: Boolean) {

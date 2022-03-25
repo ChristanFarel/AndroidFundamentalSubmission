@@ -11,9 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sub1githubuser.R
 import com.example.sub1githubuser.databinding.ActivitySettingBinding
 import com.example.sub1githubuser.preferences.SettingPreferences
-import com.example.sub1githubuser.viewmodel.SetPrefViewModel
-import com.example.sub1githubuser.viewmodel.ViewModelFactorySetting
-
+import com.example.sub1githubuser.ui.viewmodel.SetPrefViewModel
+import com.example.sub1githubuser.ui.viewmodel.ViewModelFactorySetting
 
 
 class SettingActivity : AppCompatActivity() {
@@ -26,11 +25,13 @@ class SettingActivity : AppCompatActivity() {
         _activitySetBinding = ActivitySettingBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        supportActionBar?.title = getString(R.string.ghUser_setting_title)
 
         val pref = SettingPreferences.getInstance(dataStore)
         val m = ViewModelProvider(this, ViewModelFactorySetting(pref))[SetPrefViewModel::class.java]
 
-        m.getThemeSettings().observe(this
+        m.getThemeSettings().observe(
+            this
         ) { isDarkModeActive ->
             if (isDarkModeActive) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -39,7 +40,7 @@ class SettingActivity : AppCompatActivity() {
             }
         }
 
-        m.getThemeSettings().observe(this,{
+        m.getThemeSettings().observe(this, {
             binding?.darkMode?.isChecked = it
         })
 
@@ -49,15 +50,14 @@ class SettingActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.setting_menu, menu)
-
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             R.id.homeInSetting -> {
                 val i = Intent(this, MainActivity::class.java)
                 startActivity(i)

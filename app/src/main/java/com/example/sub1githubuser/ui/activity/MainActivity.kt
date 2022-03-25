@@ -1,37 +1,26 @@
 package com.example.sub1githubuser.ui.activity
 
 import android.app.SearchManager
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.sub1githubuser.ItemsItem
 import com.example.sub1githubuser.R
-import com.example.sub1githubuser.SearchResponse
-import com.example.sub1githubuser.database.remote.retrofit.ApiConfig
 import com.example.sub1githubuser.databinding.ActivityMainBinding
 import com.example.sub1githubuser.ui.adapter.ListGHuserAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.sub1githubuser.ui.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
-
-    companion object{
-        const val rcv = "RECYCLER"
-    }
-
     private lateinit var arrayData: ArrayList<ItemsItem>
     private lateinit var binding: ActivityMainBinding
-    private lateinit var rcyUser: RecyclerView
+    private val viewModelMain: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,73 +28,36 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        rcyUser = findViewById(R.id.rcyUser)
-        rcyUser.setHasFixedSize(true)
+        supportActionBar?.title = getString(R.string.ghUser_Home_title)
 
-//        if (savedInstanceState != null) {
-//            savedInstanceState.getParcelableArrayList<ItemsItem>(rcv)?.let { showRecyclerList(it) }
-//        }else{
-//            findUser("")
-//        }
-        findUser("")
-    }
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putParcelableArrayList(rcv, arrayData)
-//    }
-
-    private fun findUser(cariUser: String) {
-        showLoading(true)
-        val client = ApiConfig.getApiService().getUser(cariUser)
-        client.enqueue(object : Callback<SearchResponse> {
-            override fun onResponse(
-                call: Call<SearchResponse>,
-                response: Response<SearchResponse>
-            ) {
-                showLoading(false)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        if (responseBody.items.isEmpty()){
-                            showEror()
-                        }else{
-                            binding.textEror.text = ""
-                        }
-                        showRecyclerList(responseBody.items)
-                    }else{
-                        showEror()
-                    }
-                } else {
-                    showEror()
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                showEror()
-                showLoading(false)
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
+        viewModelMain.showEror.observe(this, {
+            showEror(it)
         })
+
+        viewModelMain.showLoading.observe(this, {
+            showLoading(it)
+        })
+
+        viewModelMain.listUser.observe(this, {
+            showRecyclerList(it)
+        })
+
     }
 
-    private fun showEror(){
-        binding.textEror.text = getString(R.string.pesan_error_main)
+    private fun showEror(er: String) {
+        binding.textEror.text = er
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private  fun showRecyclerList(isi: ArrayList<ItemsItem>){
-        rcyUser.layoutManager = LinearLayoutManager(this)
+    private fun showRecyclerList(isi: ArrayList<ItemsItem>) {
+        binding.rcyUser.setHasFixedSize(true)
+        binding.rcyUser.layoutManager = LinearLayoutManager(this)
         val listUserAdapter = ListGHuserAdapter(isi)
         arrayData = isi
-        rcyUser.adapter  = listUserAdapter
+        binding.rcyUser.adapter = listUserAdapter
 
     }
 
@@ -114,14 +66,16 @@ class MainActivity : AppCompatActivity() {
         inflater.inflate(R.menu.main_menu, menu)
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = menu.findItem(R.id.search).actionView as androidx.appcompat.widget.SearchView
+        val searchView =
+            menu.findItem(R.id.search).actionView as androidx.appcompat.widget.SearchView
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.queryHint = resources.getString(R.string.search_hint)
-        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                findUser(query)
+                viewModelMain.findUser(query)
                 searchView.clearFocus()
                 return true
             }
@@ -134,7 +88,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             R.id.setting -> {
                 val i = Intent(this, SettingActivity::class.java)
                 startActivity(i)
@@ -149,6 +103,5 @@ class MainActivity : AppCompatActivity() {
             else -> return true
         }
     }
-
 
 }

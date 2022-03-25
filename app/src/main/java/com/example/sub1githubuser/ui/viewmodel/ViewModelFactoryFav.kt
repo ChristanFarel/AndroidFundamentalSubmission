@@ -1,4 +1,4 @@
-package com.example.sub1githubuser.viewmodel
+package com.example.sub1githubuser.ui.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sub1githubuser.di.Injection
 import com.example.sub1githubuser.repository.FavRepository
 
-class ViewModelFactoryFav private constructor(private val mFavRepository: FavRepository) : ViewModelProvider.NewInstanceFactory() {
+class ViewModelFactoryFav private constructor(private val mFavRepository: FavRepository) :
+    ViewModelProvider.NewInstanceFactory() {
 
     companion object {
         @Volatile
         private var INSTANCE: ViewModelFactoryFav? = null
+
         @JvmStatic
         fun getInstance(context: Context): ViewModelFactoryFav {
             if (INSTANCE == null) {

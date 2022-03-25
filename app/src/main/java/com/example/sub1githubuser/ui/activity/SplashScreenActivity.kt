@@ -13,27 +13,14 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.example.sub1githubuser.R
 import com.example.sub1githubuser.preferences.SettingPreferences
-import com.example.sub1githubuser.viewmodel.SetPrefViewModel
-import com.example.sub1githubuser.viewmodel.ViewModelFactorySetting
+import com.example.sub1githubuser.ui.viewmodel.SetPrefViewModel
+import com.example.sub1githubuser.ui.viewmodel.ViewModelFactorySetting
 
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class SplashScreen : AppCompatActivity() {
 
-
-//    mainViewModel.getThemeSettings().observe(this,
-//    { isDarkModeActive ->
-//        if (isDarkModeActive) {
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//        } else {
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//        }
-//    })
-
-    companion object{
-        const val lamaDelay = 2500
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
@@ -41,7 +28,8 @@ class SplashScreen : AppCompatActivity() {
         val pref = SettingPreferences.getInstance(dataStore)
         val m = ViewModelProvider(this, ViewModelFactorySetting(pref))[SetPrefViewModel::class.java]
 
-        m.getThemeSettings().observe(this
+        m.getThemeSettings().observe(
+            this
         ) { isDarkModeActive ->
             if (isDarkModeActive) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -50,7 +38,6 @@ class SplashScreen : AppCompatActivity() {
             }
         }
 
-
         supportActionBar?.hide()
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -58,4 +45,9 @@ class SplashScreen : AppCompatActivity() {
             finish()
         }, lamaDelay.toLong())
     }
+
+    companion object {
+        const val lamaDelay = 2500
+    }
+
 }

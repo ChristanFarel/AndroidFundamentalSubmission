@@ -1,8 +1,8 @@
 package com.example.sub1githubuser.database.remote.retrofit
 
-import com.example.sub1githubuser.database.remote.response.DetailResponse
 import com.example.sub1githubuser.FollowResponseItem
 import com.example.sub1githubuser.SearchResponse
+import com.example.sub1githubuser.database.remote.response.DetailResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -15,7 +15,7 @@ interface ApiService {
     ): Call<SearchResponse>
 
     @GET("users/{username}")
-    fun  getUsername(
+    fun getUsername(
         @Path("username") name: String
     ): Call<DetailResponse>
 

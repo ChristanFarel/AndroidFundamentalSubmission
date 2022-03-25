@@ -9,10 +9,11 @@ import com.example.sub1githubuser.ui.fragment.FollowingsFragment
 
 class SectionsPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
 
-    companion object{
+    companion object {
         var username = ""
         var key = "KEY"
     }
+
     override fun getItemCount(): Int {
         return 2
     }

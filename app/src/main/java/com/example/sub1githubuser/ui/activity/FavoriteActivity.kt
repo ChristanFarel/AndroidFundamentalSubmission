@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,8 +12,8 @@ import com.example.sub1githubuser.R
 import com.example.sub1githubuser.databinding.ActivityFavoriteBinding
 import com.example.sub1githubuser.di.Injection
 import com.example.sub1githubuser.ui.adapter.FavoriteAdapter
-import com.example.sub1githubuser.viewmodel.FavViewModel
-import com.example.sub1githubuser.viewmodel.ViewModelFactoryFav
+import com.example.sub1githubuser.ui.viewmodel.FavViewModel
+import com.example.sub1githubuser.ui.viewmodel.ViewModelFactoryFav
 
 class FavoriteActivity : AppCompatActivity() {
 
@@ -25,22 +26,40 @@ class FavoriteActivity : AppCompatActivity() {
         _activityFavBinding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        supportActionBar?.title = getString(R.string.ghUser_fav_title)
 
         val favRepository = Injection.provideRepository(this)
         val favViewModel = obtainViewModel(this@FavoriteActivity)
 
-        favViewModel.getAll().observe(this,{
-            if (it != null){
+        favViewModel.getAll().observe(this, {
+            showLoading(true)
+            if (it != null) {
+                showLoading(false)
+                if (it.isEmpty()) {
+                    binding?.txtEmptyFav?.text = getString(R.string.empty_msg_fav)
+                } else {
+                    binding?.txtEmptyFav?.text = ""
+                }
                 adapter.submitList(it)
             }
         })
 
-        adapter = FavoriteAdapter{
+        adapter = FavoriteAdapter {
             favRepository.delete(it)
         }
+
         binding?.rcyFav?.setHasFixedSize(true)
         binding?.rcyFav?.layoutManager = LinearLayoutManager(this)
         binding?.rcyFav?.adapter = adapter
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding?.pBarFav?.visibility = View.VISIBLE
+        } else {
+            binding?.pBarFav?.visibility = View.GONE
+
+        }
     }
 
     private fun obtainViewModel(activity: AppCompatActivity): FavViewModel {
@@ -48,15 +67,14 @@ class FavoriteActivity : AppCompatActivity() {
         return ViewModelProvider(activity, factory).get(FavViewModel::class.java)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.fav_menu, menu)
-
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             R.id.homeInFav -> {
                 val i = Intent(this, MainActivity::class.java)
                 startActivity(i)
